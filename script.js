@@ -1,30 +1,56 @@
+// Fonction pour générer des coordonnées x et y aléatoires
+function randomXY(obj) {
+  obj.x = Math.floor(Math.random() * 40);
+  obj.y = Math.floor(Math.random() * 18);
+  return (obj = {
+    x: obj.x,
+    y: obj.y
+  });
+}
+
 // Définition des pièges
 
-const trap1X = 4;
-const trap1Y = 4;
-const trap1 = {
-  x: trap1X,
-  y: trap1Y
-};
+// const trap1X = 4;
+// const trap1Y = 4;
+// const trap1 = {
+//   x: trap1X,
+//   y: trap1Y
+// };
 
-console.log(`Position du piège 1 : ${JSON.stringify(trap1)}`);
+// console.log(`Position du piège 1 : ${JSON.stringify(trap1)}`);
 
-const trap2X = 9;
-const trap2Y = 9;
-const trap2 = {
-  x: trap2X,
-  y: trap2Y
-};
-console.log(`Position du piège 2 : ${JSON.stringify(trap2)}`);
+// const trap2X = 9;
+// const trap2Y = 9;
+// const trap2 = {
+//   x: trap2X,
+//   y: trap2Y
+// };
+// console.log(`Position du piège 2 : ${JSON.stringify(trap2)}`);
 
-const trap3X = 2;
-const trap3Y = 2;
-const trap3 = {
-  x: trap3X,
-  y: trap3Y
-};
+// const trap3X = 2;
+// const trap3Y = 2;
+// const trap3 = {
+//   x: trap3X,
+//   y: trap3Y
+// };
 
-console.log(`Position du piège 3 : ${JSON.stringify(trap3)}`);
+// console.log(`Position du piège 3 : ${JSON.stringify(trap3)}`);
+
+// Fonction pour automatiser les pièges
+function trapRandom(n) {
+  const traps = [];
+  for (let i = 0; i < n; i++) {
+    const trap = {x: 0, y: 0};
+    trap.x = Math.floor(Math.random() * 40);
+    trap.y = Math.floor(Math.random() * 18);
+    traps.push(trap);
+  }
+  return traps;
+}
+const n = 2;
+const traps = trapRandom(n);
+console.log(`Nombre de pièges : ${n}, 
+  Position des pièges : ${JSON.stringify(trapRandom(n))}`);
 
 // Fonction de comparaison de position
 
@@ -37,33 +63,36 @@ function comparePosition(obj1, obj2) {
 }
 
 // Validation de l'emplacement de l'éclair
-let checkLight = false;
+// let checkLight = false;
 let light = {
   x: 0,
   y: 0
 };
 
-while (!checkLight) {
-  // const lightX = Number(prompt("Merci de renseigner la position X de l'éclair de puissance"));
-  // const lightY = Number(prompt("Merci de renseigner la position Y de l'éclair de puissance"));
-  const lightX = 1;
-  const lightY = 1;
+randomXY(light);
+console.log(`Position de l'éclair : ${JSON.stringify(light)}`);
 
-  light = {
-    x: lightX,
-    y: lightY
-  };
-  if (
-    comparePosition(light, trap1) === false &&
-    comparePosition(light, trap2) === false &&
-    comparePosition(light, trap3) === false
-  ) {
-    checkLight = true;
-    console.log(`La position de l'éclair à trouver : ${JSON.stringify(light)}`);
-  } else {
-    console.warn(`La position de l'éclair est la même que celle d'un piège, merci de redéfinir vos emplacements`);
-  }
-}
+// while (!checkLight) {
+//   // const lightX = Number(prompt("Merci de renseigner la position X de l'éclair de puissance"));
+//   // const lightY = Number(prompt("Merci de renseigner la position Y de l'éclair de puissance"));
+//   const lightX = 1;
+//   const lightY = 1;
+
+//   light = {
+//     x: lightX,
+//     y: lightY
+//   };
+//   if (
+//     comparePosition(light, trap1) === false &&
+//     comparePosition(light, trap2) === false &&
+//     comparePosition(light, trap3) === false
+//   ) {
+//     checkLight = true;
+//     console.log(`La position de l'éclair à trouver : ${JSON.stringify(light)}`);
+//   } else {
+//     console.warn(`La position de l'éclair est la même que celle d'un piège, merci de redéfinir vos emplacements`);
+//   }
+// }
 
 // Validation de l'emplacement de Thor
 let checkThor = false;
@@ -82,15 +111,15 @@ while (!checkThor) {
   thor.x = initialTX;
   thor.y = initialTY;
 
-  if (
-    comparePosition(thor, trap1) === false &&
-    comparePosition(thor, trap2) === false &&
-    comparePosition(thor, trap3) === false
-  ) {
-    checkThor = true;
-    console.log(`Position en début de tour : ${JSON.stringify(thor)}`);
-  } else {
-    console.warn(`La position de Thor est la même que celle d'un piège, merci de redéfinir vos emplacements`);
+  let result;
+  for (let i = 0; i < n; i++) {
+    result = comparePosition(thor, traps[i]);
+    if (result === true) {
+      console.warn(`La position de Thor est la même que celle d'un piège, merci de redéfinir vos emplacements`);
+    } else {
+      checkThor = true;
+      console.log(`Thor en début de tour : ${JSON.stringify(thor)}`);
+    }
   }
 }
 
@@ -157,34 +186,44 @@ while (!statut) {
   //   initialTY -= 1;
   // }
   mouvement(direction);
+  console.log(`Position de l'éclair : ${JSON.stringify(light)}`);
+  console.log(`Nombre de pièges : ${n}, 
+  Position des pièges : ${JSON.stringify(trapRandom(n))}`);
   console.log(`Direction prise : ${direction}`);
   console.log(`Thor en fin de tour : ${JSON.stringify(thor)}`);
+  for (const trap of traps) {
+    if (comparePosition(thor, trap) === true) {
+      thor.pv -= 1;
+      console.warn(
+        `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège : ${JSON.stringify(trap1)}`
+      );
+    }
+    // if (comparePosition(thor, trap1) === true) {
+    //   thor.pv -= 1;
+    //   console.warn(
+    //     `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège 1 : ${JSON.stringify(trap1)}`
+    //   );
+    // } else if (comparePosition(thor, trap2) === true) {
+    //   thor.pv -= 1;
+    //   console.warn(
+    //     `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège 2 : ${JSON.stringify(trap2)}`
+    //   );
+    // } else if (comparePosition(thor, trap3) === true) {
+    //   thor.pv -= 1;
+    //   console.warn(
+    //     `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège 3 : ${JSON.stringify(trap3)}`
+    //   );
+    // }
 
-  if (comparePosition(thor, trap1) === true) {
-    thor.pv -= 1;
-    console.warn(
-      `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège 1 : ${JSON.stringify(trap1)}`
-    );
-  } else if (comparePosition(thor, trap2) === true) {
-    thor.pv -= 1;
-    console.warn(
-      `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège 2 : ${JSON.stringify(trap2)}`
-    );
-  } else if (comparePosition(thor, trap3) === true) {
-    thor.pv -= 1;
-    console.warn(
-      `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège 3 : ${JSON.stringify(trap3)}`
-    );
-  }
-
-  if (comparePosition(thor, light) === true) {
-    statut = true;
-    console.warn(`Victoire !`);
-  } else if (thor.x > 39 || thor.x < 0 || thor.y > 17 || thor.y < 0) {
-    statut = true;
-    console.warn(`Défaite, tu es sorti de la map`);
-  } else if (thor.pv === 0) {
-    statut = true;
-    console.warn(`Défaite tu n'as plus de points de vie`);
+    if (comparePosition(thor, light) === true) {
+      statut = true;
+      console.warn(`Victoire !`);
+    } else if (thor.x > 39 || thor.x < 0 || thor.y > 17 || thor.y < 0) {
+      statut = true;
+      console.warn(`Défaite, tu es sorti de la map`);
+    } else if (thor.pv === 0) {
+      statut = true;
+      console.warn(`Défaite tu n'as plus de points de vie`);
+    }
   }
 }
