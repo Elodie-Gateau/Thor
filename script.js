@@ -44,10 +44,10 @@ let light = {
 };
 
 while (!checkLight) {
-  const lightX = Number(prompt("Merci de renseigner la position X de l'éclair de puissance"));
-  const lightY = Number(prompt("Merci de renseigner la position Y de l'éclair de puissance"));
-  // const lightX = 3;
-  // const lightY = 8;
+  // const lightX = Number(prompt("Merci de renseigner la position X de l'éclair de puissance"));
+  // const lightY = Number(prompt("Merci de renseigner la position Y de l'éclair de puissance"));
+  const lightX = 1;
+  const lightY = 1;
 
   light = {
     x: lightX,
@@ -61,27 +61,27 @@ while (!checkLight) {
     checkLight = true;
     console.log(`La position de l'éclair à trouver : ${JSON.stringify(light)}`);
   } else {
-    console.error(`La position de l'éclair est la même que celle d'un piège, merci de redéfinir vos emplacements`);
+    console.warn(`La position de l'éclair est la même que celle d'un piège, merci de redéfinir vos emplacements`);
   }
 }
 
 // Validation de l'emplacement de Thor
 let checkThor = false;
-let thor = {
+const thor = {
   x: 0,
-  y: 0
+  y: 0,
+  pv: 3
 };
 
 while (!checkThor) {
-  let initialTX = Number(prompt('Merci de renseigner la position X de Thor'));
-  let initialTY = Number(prompt('Merci de renseigner la position Y de Thor'));
-  // let initialTX = 3;
-  // let initialTY = 8;
+  // let initialTX = Number(prompt('Merci de renseigner la position X de Thor'));
+  // let initialTY = Number(prompt('Merci de renseigner la position Y de Thor'));
+  let initialTX = 3;
+  let initialTY = 3;
 
-  thor = {
-    x: initialTX,
-    y: initialTY
-  };
+  thor.x = initialTX;
+  thor.y = initialTY;
+
   if (
     comparePosition(thor, trap1) === false &&
     comparePosition(thor, trap2) === false &&
@@ -90,7 +90,7 @@ while (!checkThor) {
     checkThor = true;
     console.log(`Position en début de tour : ${JSON.stringify(thor)}`);
   } else {
-    console.error(`La position de Thor est la même que celle d'un piège, merci de redéfinir vos emplacements`);
+    console.warn(`La position de Thor est la même que celle d'un piège, merci de redéfinir vos emplacements`);
   }
 }
 
@@ -133,6 +133,8 @@ while (!statut) {
     SW : Sud-Ouest
     W : Ouest
     NW : Nord-Ouest`);
+  // const direction = 'SE';
+
   // if (direction === 'N') {
   //   initialTY -= 1;
   // } else if (direction === 'NE') {
@@ -156,22 +158,33 @@ while (!statut) {
   // }
   mouvement(direction);
   console.log(`Direction prise : ${direction}`);
-  console.log(`Position en fin de tour : ${JSON.stringify(thor)}`);
+  console.log(`Thor en fin de tour : ${JSON.stringify(thor)}`);
+
+  if (comparePosition(thor, trap1) === true) {
+    thor.pv -= 1;
+    console.warn(
+      `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège 1 : ${JSON.stringify(trap1)}`
+    );
+  } else if (comparePosition(thor, trap2) === true) {
+    thor.pv -= 1;
+    console.warn(
+      `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège 2 : ${JSON.stringify(trap2)}`
+    );
+  } else if (comparePosition(thor, trap3) === true) {
+    thor.pv -= 1;
+    console.warn(
+      `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège 3 : ${JSON.stringify(trap3)}`
+    );
+  }
 
   if (comparePosition(thor, light) === true) {
     statut = true;
-    console.info(`Victoire !`);
+    console.warn(`Victoire !`);
   } else if (thor.x > 39 || thor.x < 0 || thor.y > 17 || thor.y < 0) {
     statut = true;
-    console.warn(`Défaite`);
-  } else if (comparePosition(thor, trap1) === true) {
+    console.warn(`Défaite, tu es sorti de la map`);
+  } else if (thor.pv === 0) {
     statut = true;
-    console.warn(`Défaite : tu es tombé dans un piège ! Position du piège 1 : ${JSON.stringify(trap1)}`);
-  } else if (comparePosition(thor, trap2) === true) {
-    statut = true;
-    console.warn(`Défaite : tu es tombé dans un piège ! Position du piège 1 : ${JSON.stringify(trap2)}`);
-  } else if (comparePosition(thor, trap3) === true) {
-    statut = true;
-    console.warn(`Défaite : tu es tombé dans un piège ! Position du piège 1 : ${JSON.stringify(trap3)}`);
+    console.warn(`Défaite tu n'as plus de points de vie`);
   }
 }
