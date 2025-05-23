@@ -79,15 +79,15 @@ let light = {
   y: 0
 };
 
-randomXY(light);
-console.log(`Position de l'éclair : ${JSON.stringify(light)}`);
+// randomXY(light);
+// console.log(`Position de l'éclair : ${JSON.stringify(light)}`);
 
 while (!checkLight) {
   // const lightX = Number(prompt("Merci de renseigner la position X de l'éclair de puissance"));
   // const lightY = Number(prompt("Merci de renseigner la position Y de l'éclair de puissance"));
   // const lightX = 1;
   // const lightY = 1;
-
+  randomXY(light);
   // light = {
   //   x: lightX,
   //   y: lightY
@@ -113,6 +113,10 @@ while (!checkLight) {
   //   console.warn(`La position de l'éclair est la même que celle d'un piège, merci de redéfinir vos emplacements`);
   // }
 }
+
+// Position de Thanos
+let thanos = {x: light.x + 1, y: light.y + 1};
+console.log(`Position de Thanos : ${JSON.stringify(thanos)}`);
 
 // Validation de l'emplacement de Thor
 let checkThor = false;
@@ -148,28 +152,29 @@ let statut = false;
 
 // Fonction pour définir la nouvelle position selon la direction sélectionnée
 function mouvement(direction, perso) {
-  if (direction === 'N') {
-    perso.y -= 1;
-  } else if (direction === 'NE') {
-    perso.x += 1;
-    perso.y -= 1;
-  } else if (direction === 'E') {
-    perso.x += 1;
-  } else if (direction === 'SE') {
-    perso.x += 1;
-    perso.y += 1;
-  } else if (direction === 'S') {
-    perso.y += 1;
-  } else if (direction === 'SW') {
-    perso.x -= 1;
-    perso.y += 1;
-  } else if (direction === 'W') {
-    perso.x -= 1;
-  } else if (direction === 'NW') {
-    perso.x -= 1;
-    perso.y -= 1;
-  }
   let newPerso = {x: perso.x, y: perso.y};
+  if (direction === 'N') {
+    newPerso.y -= 1;
+  } else if (direction === 'NE') {
+    newPerso.x += 1;
+    newPerso.y -= 1;
+  } else if (direction === 'E') {
+    newPerso.x += 1;
+  } else if (direction === 'SE') {
+    newPerso.x += 1;
+    newPerso.y += 1;
+  } else if (direction === 'S') {
+    newPerso.y += 1;
+  } else if (direction === 'SW') {
+    newPerso.x -= 1;
+    newPerso.y += 1;
+  } else if (direction === 'W') {
+    newPerso.x -= 1;
+  } else if (direction === 'NW') {
+    newPerso.x -= 1;
+    newPerso.y -= 1;
+  }
+
   return newPerso;
 }
 
@@ -208,19 +213,26 @@ while (!statut) {
   //   initialTY -= 1;
   // }
   let newThor = mouvement(direction, thor);
-  console.log(newThor);
+  let checkBlocker = false;
   for (const blocker of blockers) {
-    if (comparePosition(thor, blocker) !== true) {
-      thor = newThor;
-    } else {
-      console.warn(`Obstacle ! Tu ne peux pas faire ce déplacement : ${JSON.stringify(blocker)}`);
+    if (comparePosition(newThor, blocker) === true) {
+      checkBlocker = true;
     }
   }
+  if (checkBlocker === false) {
+    thor.x = newThor.x;
+    thor.y = newThor.y;
+  } else {
+    console.warn(`Obstacle ! Tu ne peux pas faire ce déplacement : ${JSON.stringify(newThor)}`);
+    continue;
+  }
+
+  console.log(``);
 
   console.log(`Position de l'éclair : ${JSON.stringify(light)}`);
 
-  console.log(`Nombre de pièges : ${n}, 
-  Position des pièges : ${JSON.stringify(trapRandom(n))}`);
+  console.log(`Nombre de pièges : ${nTraps}, 
+  Position des pièges : ${JSON.stringify(trapRandom(nTraps))}`);
 
   console.log(`Direction prise : ${direction}`);
 
@@ -230,7 +242,9 @@ while (!statut) {
     if (comparePosition(thor, trap) === true) {
       thor.pv -= 1;
       console.warn(
-        `Piège ! Tu as perdu 1 point de vie, il t'en reste ${thor.pv}/3 ! Position du piège : ${JSON.stringify(trap)}`
+        `Piège ! Tu as perdu 1 point de vie ☠️, il t'en reste ${thor.pv}/3 ! Position du piège : ${JSON.stringify(
+          trap
+        )}`
       );
     }
   }
@@ -254,12 +268,42 @@ while (!statut) {
 
   if (comparePosition(thor, light) === true) {
     statut = true;
-    console.warn(`Victoire !`);
+    alert(`Victoire ! ⚡️`);
   } else if (thor.x > 39 || thor.x < 0 || thor.y > 17 || thor.y < 0) {
     statut = true;
-    console.warn(`Défaite, tu es sorti de la map`);
+    alert(`Défaite, tu es sorti de la map 😩`);
   } else if (thor.pv === 0) {
     statut = true;
-    console.warn(`Défaite tu n'as plus de points de vie`);
+    alert(`Défaite tu n'as plus de points de vie ☠️☠️☠️`);
+  } else if (comparePosition(thor, thanos) === true) {
+    statut = true;
+    alert(`Défaire, tu as rencontré Thanos...🥊`);
   }
+  console.log(`Thanos en début de tour: ${JSON.stringify(thanos)}`);
+
+  let randomDirection = Math.floor(Math.random * 8);
+  console.log(randomDirection);
+  let directionThanos = '';
+  if (randomDirection === 1) {
+    directionThanos = 'N';
+  } else if (randomDirection === 2) {
+    directionThanos = 'NE';
+  } else if (randomDirection === 3) {
+    directionThanos = 'E';
+  } else if (randomDirection === 4) {
+    directionThanos = 'SE';
+  } else if (randomDirection === 5) {
+    directionThanos = 'S';
+  } else if (randomDirection === 6) {
+    directionThanos = 'SW';
+  } else if (randomDirection === 7) {
+    directionThanos = 'W';
+  } else if (randomDirection === 8) {
+    directionThanos = 'NW';
+  }
+
+  console.log(directionThanos);
+
+  thanos = mouvement(directionThanos, thanos);
+  console.log(`Nouvelle position de Thanos : ${JSON.stringify(thanos)}`);
 }
