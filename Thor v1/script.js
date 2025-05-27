@@ -281,7 +281,7 @@ while (!statut) {
   }
   console.log(`Thanos en début de tour: ${JSON.stringify(thanos)}`);
 
-  let randomDirection = Math.floor(Math.random * 8);
+  let randomDirection = Math.ceil(Math.random * 7n);
   console.log(randomDirection);
   let directionThanos = '';
   if (randomDirection === 1) {

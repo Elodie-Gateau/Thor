@@ -1,0 +1,31 @@
+/* Reset */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(40, 1fr);
+    grid-template-rows: repeat(18, 1fr);
+    width: 90%;
+    height: 80%;
+    background: url(images/board.png) center/cover;
+}
+
+.light {
+    background: url(images/light.png) center/cover;
+}
+
+.thor {
+    background: url(images/thor.png) center/cover;
+}
