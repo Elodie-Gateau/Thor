@@ -1,0 +1,119 @@
+/* Reset */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.pannel {
+    height: 5rem;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+}
+
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(40, 1fr);
+    grid-template-rows: repeat(18, 1fr);
+    width: 90%;
+    height: 80%;
+    background: url(images/board.png) center/cover;
+}
+
+.light {
+    background: url(images/light.png) center/cover;
+}
+
+.thor-up {
+    background: url(images/thor-up.png) center/cover;
+    z-index: 10;
+}
+
+.thor-up2 {
+    background: url(images/thor-up2.png) center/cover;
+    z-index: 10;
+}
+
+.thor-down {
+    background: url(images/thor-down.png) center/cover;
+    z-index: 10;
+}
+
+.thor-down2 {
+    background: url(images/thor-down2.png) center/cover;
+    z-index: 10;
+}
+
+.thor-right {
+    background: url(images/thor-right.png) center/cover;
+    z-index: 10;
+}
+
+.thor-right2 {
+    background: url(images/thor-right2.png) center/cover;
+    z-index: 10;
+}
+
+.thor-left {
+    background: url(images/thor-left.png) center/cover;
+    z-index: 10;
+}
+
+.thor-left2 {
+    background: url(images/thor-left2.png) center/cover;
+    z-index: 10;
+}
+
+.thor-trap {
+    background: url(images/thor-trap.png) center/cover;
+    z-index: 10;
+}
+
+
+.trap {
+    background: url(images/trap.png) center/cover;
+}
+
+.pv {
+    background: url(images/pv.png) center/cover;
+    width: 50px;
+    height: 50px;
+}
+
+.thanos {
+    background: url(images/thanos.png) center/cover;
+    z-index: 10;
+}
+
+.blocker {
+    background: url(images/blocker.png) center/cover;
+}
+
+.victory,
+.error-map,
+.defeat-pv,
+.defeat-thanos {
+    z-index: 30;
+    position: fixed;
+    text-align: center;
+    top: 45%;
+    left: 0;
+    right: 0;
+    padding: 5rem;
+    background-color: white;
+    display: none;
+}

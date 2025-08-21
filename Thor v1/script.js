@@ -277,7 +277,7 @@ while (!statut) {
     alert(`Défaite tu n'as plus de points de vie ☠️☠️☠️`);
   } else if (comparePosition(thor, thanos) === true) {
     statut = true;
-    alert(`Défaire, tu as rencontré Thanos...🥊`);
+    alert(`Défaite, tu as rencontré Thanos...🥊`);
   }
   console.log(`Thanos en début de tour: ${JSON.stringify(thanos)}`);
 
